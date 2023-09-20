@@ -4,7 +4,10 @@
 
 package edu.neu.coe.info6205.randomwalk;
 
+import java.io.IOException;
 import java.util.Random;
+import java.lang.Math;
+import java.io.FileWriter;
 
 public class RandomWalk {
 
@@ -21,7 +24,10 @@ public class RandomWalk {
      */
     private void move(int dx, int dy) {
         // FIXME do move by replacing the following code
-         throw new RuntimeException("Not implemented");
+        // throw new RuntimeException("Not implemented");
+        // update the current position by adding the increment
+        x += dx;
+        y += dy;
         // END 
     }
 
@@ -32,6 +38,10 @@ public class RandomWalk {
      */
     private void randomWalk(int m) {
         // FIXME
+        // Do randomMove m times
+        for (int i = 0; i < m; i++) {
+            randomMove();
+        }
         // END 
     }
 
@@ -52,7 +62,8 @@ public class RandomWalk {
      */
     public double distance() {
         // FIXME by replacing the following code
-         return 0.0;
+        // formula to find Euclid distance of 2 points, Pythagorean theorem
+         return Math.sqrt(x*x+y*y);
         // END 
     }
 
@@ -79,8 +90,30 @@ public class RandomWalk {
         int m = Integer.parseInt(args[0]);
         int n = 30;
         if (args.length > 1) n = Integer.parseInt(args[1]);
-        double meanDistance = randomWalkMulti(m, n);
-        System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+
+        /******* do a series of random walk and record the result in a csv file *******/
+        // set up a series of steps, increasing exponentially
+        // open a file for the record
+        try {
+            FileWriter fp = new FileWriter("RandomWalkResult.csv");
+            fp.write("test,steps;displacement\n");
+            for (int i = 0; i < m; i++) {
+                double meanDistance = 0;//
+                double tests = Math.pow(2,i); // every test is twice as long as its previous test
+                meanDistance = randomWalkMulti((int)tests, n);// calculate the meanDistance of 30 tests for each m
+                String lineToPrint = String.format("step %d: %.2f over %d experiments of %d steps \n", i, meanDistance, n, (int)tests);
+                fp.write(i+","+tests+","+meanDistance+"\n"); // write to a file
+                System.out.print(lineToPrint);
+            }
+            fp.close();
+        } catch (IOException e) {
+            System.out.println("File operation error:");
+            e.printStackTrace();
+        }
+
+        // close the file
+
+
     }
 
 }
