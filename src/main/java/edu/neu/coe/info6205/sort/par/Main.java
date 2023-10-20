@@ -22,14 +22,19 @@ public class Main {
         Random random = new Random();
         int[] array = new int[2000000];
         ArrayList<Long> timeList = new ArrayList<>();
-        for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
+        //System.out.println("Check Point 1: Array length: " + array.length);
+        for (int j = 0; j < 15; j++) {
+            //ParSort.cutoff = 1000 * (int)Math.pow(2,j);
+            ParSort.cutoff = 12000 ;
+            ParSort.maxDepth = j;
+            // System.out.println("Check Point 2: cutoff: " + ParSort.cutoff);
             // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
             long time;
             long startTime = System.currentTimeMillis();
             for (int t = 0; t < 10; t++) {
                 for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
                 ParSort.sort(array, 0, array.length);
+                //System.out.println("Check Point 3." + t +":  "+ startTime);
             }
             long endTime = System.currentTimeMillis();
             time = (endTime - startTime);
@@ -45,7 +50,9 @@ public class Main {
             BufferedWriter bw = new BufferedWriter(isr);
             int j = 0;
             for (long i : timeList) {
-                String content = (double) 10000 * (j + 1) / 2000000 + "," + (double) i / 10 + "\n";
+                //String content = (double) 1000 * (int)Math.pow(2,j) + "," + (double) i / 10 + "\n";
+                //String content = (double) 4000* (j+1) + "," + (double) i / 10 + "\n";
+                String content = (double) j + "," + (double) i / 10 + "\n";
                 j++;
                 bw.write(content);
                 bw.flush();
