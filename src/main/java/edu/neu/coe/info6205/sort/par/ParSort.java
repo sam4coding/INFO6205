@@ -10,9 +10,14 @@ import java.util.concurrent.CompletableFuture;
 class ParSort {
 
     public static int cutoff = 1000;
-
+    public static int maxDepth = 0;
+    public static int nCalls = 0;
+    public static int nDepth = 0;
     public static void sort(int[] array, int from, int to) {
-        if (to - from < cutoff) Arrays.sort(array, from, to);
+        //if (to - from < cutoff) Arrays.sort(array, from, to);
+        nCalls ++;
+        nDepth = (int) (Math.log(nCalls)/Math.log(2));
+        if (nDepth > maxDepth || to - from < cutoff ) Arrays.sort(array, from, to);
         else {
             // FIXME next few lines should be removed from public repo.
             CompletableFuture<int[]> parsort1 = parsort(array, from, from + (to - from) / 2); // TO IMPLEMENT
